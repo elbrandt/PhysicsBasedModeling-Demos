@@ -8,13 +8,17 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows") # we'll assume 'Windows' means MSVC f
     add_compile_definitions(NOMINMAX)
     # disable warnings about some casting inconsistencies
     set (CMAKE_CXX_FLAGS "/wd\"4244\" /wd\"4305\" /wd\"4267\" ${CMAKE_CXX_FLAGS}")
+    # lib suffix is different on windows than ubuntu
+    # surely cmake can take care of this automatically, but I don't know how.
+    set (LIB_SUFFIX ".lib")
 else()
     set (CMAKE_CXX_FLAGS "-Wno-deprecated ${CMAKE_CXX_FLAGS}")
+    set (LIB_SUFFIX ".so")
 endif()
 
 add_definitions(-DBUILD_COMPONENT_SRC_PREFIX="" -DBUILD_OPTLEVEL_DEV)
 
-set(USD_ROOT_DIR D:/buildtools/USD_dbg)
+set(USD_ROOT_DIR /usr/local/USD)
 set(USD_LIB_DIR ${USD_ROOT_DIR}/lib/)
 set(USD_INC_DIR ${USD_ROOT_DIR}/include/)
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows") # we'll assume 'Windows' means MSVC for simplicity

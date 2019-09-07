@@ -16,14 +16,19 @@ target_include_directories(USDtoOBJ
              ${USD_BOOST_INC_DIR}
        )
 
-target_link_libraries(
-        USDtoOBJ
-                ${USD_LIB_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}gf${CMAKE_STATIC_LIBRARY_SUFFIX}
-                ${USD_LIB_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}sdf${CMAKE_STATIC_LIBRARY_SUFFIX}
-                ${USD_LIB_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}tf${CMAKE_STATIC_LIBRARY_SUFFIX}
-                ${USD_LIB_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}usd${CMAKE_STATIC_LIBRARY_SUFFIX}
-                ${USD_LIB_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}usdGeom${CMAKE_STATIC_LIBRARY_SUFFIX}
-                ${USD_LIB_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}vt${CMAKE_STATIC_LIBRARY_SUFFIX}
-                # ${USD_LIB_DIR}/libboost_python.so # todo find library
+ set (LINK_LIBS 
+                ${USD_LIB_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}gf${LIB_SUFFIX}
+                ${USD_LIB_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}sdf${LIB_SUFFIX}
+                ${USD_LIB_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}tf${LIB_SUFFIX}
+                ${USD_LIB_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}usd${LIB_SUFFIX}
+                ${USD_LIB_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}usdGeom${LIB_SUFFIX}
+                ${USD_LIB_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}vt${LIB_SUFFIX}
                 ${PYTHON_LIBRARY}
-        )
+)
+
+if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Windows") 
+        # this library is not needed on windows builds (linked via pragmas aready by boost)
+        list(APPEND LINK_LIBS ${USD_LIB_DIR}/libboost_python.so) # todo find library (but appears to not be necessary)
+endif()
+
+target_link_libraries(USDtoOBJ ${LINK_LIBS})
