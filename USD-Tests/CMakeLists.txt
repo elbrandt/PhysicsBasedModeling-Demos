@@ -3,12 +3,22 @@ set (CMAKE_CXX_STANDARD 11)
 
 project (USD-Tests)
 
-set (CMAKE_CXX_FLAGS "-Wno-deprecated ${CMAKE_CXX_FLAGS}")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows") # we'll assume 'Windows' means MSVC for simplicity
+    # windows.h defines max as a macro, which interferes with std::limits<>::max()
+    add_compile_definitions(NOMINMAX)
+    # disable warnings about some casting inconsistencies
+    set (CMAKE_CXX_FLAGS "/wd\"4244\" /wd\"4305\" /wd\"4267\" ${CMAKE_CXX_FLAGS}")
+else()
+    set (CMAKE_CXX_FLAGS "-Wno-deprecated ${CMAKE_CXX_FLAGS}")
+endif()
 
 add_definitions(-DBUILD_COMPONENT_SRC_PREFIX="" -DBUILD_OPTLEVEL_DEV)
 
-set(USD_ROOT_DIR ~/USD)
+set(USD_ROOT_DIR D:/buildtools/USD_dbg)
 set(USD_LIB_DIR ${USD_ROOT_DIR}/lib/)
 set(USD_INC_DIR ${USD_ROOT_DIR}/include/)
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows") # we'll assume 'Windows' means MSVC for simplicity
+    set(USD_BOOST_INC_DIR ${USD_INC_DIR}/boost-1_65_1)
+endif()
 
 add_subdirectory(tests)
