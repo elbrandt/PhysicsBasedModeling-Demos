@@ -16,20 +16,20 @@ target_include_directories(animateAttribute
             ${USD_BOOST_INC_DIR}
         )
 
- set (LINK_LIBS 
-                ${USD_LIB_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}gf${LIB_SUFFIX}
-                ${USD_LIB_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}sdf${LIB_SUFFIX}
-                ${USD_LIB_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}tf${LIB_SUFFIX}
-                ${USD_LIB_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}usd${LIB_SUFFIX}
-                ${USD_LIB_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}usdGeom${LIB_SUFFIX}
-                ${USD_LIB_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}vt${LIB_SUFFIX}
+ set (LINK_LIBS
+                ${USD_LIB_DIR}/${USD_LIB_PREFIX}gf${USD_LIB_SUFFIX}
+                ${USD_LIB_DIR}/${USD_LIB_PREFIX}sdf${USD_LIB_SUFFIX}
+                ${USD_LIB_DIR}/${USD_LIB_PREFIX}tf${USD_LIB_SUFFIX}
+                ${USD_LIB_DIR}/${USD_LIB_PREFIX}usd${USD_LIB_SUFFIX}
+                ${USD_LIB_DIR}/${USD_LIB_PREFIX}usdGeom${USD_LIB_SUFFIX}
+                ${USD_LIB_DIR}/${USD_LIB_PREFIX}vt${USD_LIB_SUFFIX}
                 ${PYTHON_LIBRARY}
 )
 
-if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Windows") 
+if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         # this library is not needed on windows builds (linked via pragmas aready by boost)
-        list(APPEND LINK_LIBS ${USD_LIB_DIR}/libboost_python.so) # todo find library (but appears to not be necessary)
+        list(APPEND LINK_LIBS ${USD_LIB_DIR}/${USD_LIB_PREFIX}boost_python${USD_LIB_SUFFIX}) # todo find library (but appears to not be necessary)
 endif()
-       
+
 
 target_link_libraries(animateAttribute ${LINK_LIBS})
