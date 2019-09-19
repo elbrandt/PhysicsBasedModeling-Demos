@@ -1,0 +1,8 @@
+add_subdirectory(quadFacedCube)
+add_subdirectory(latticeMesh)
+add_subdirectory(latticeMeshBoundary)
+add_subdirectory(latticeMeshBoundaryRelaxation)
+add_subdirectory(latticeMeshElasticityTest1)
+add_subdirectory(latticeMeshElasticityTest2)
+add_subdirectory(latticeMeshElasticityTest3)
+add_subdirectory(latticeMeshElasticityTest4)
