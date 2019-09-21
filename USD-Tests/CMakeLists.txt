@@ -21,8 +21,10 @@ endif()
 
 add_definitions(-DBUILD_COMPONENT_SRC_PREFIX="" -DBUILD_OPTLEVEL_DEV)
 
-if (NOT USD_ROOT_DIR)
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows") # we'll assume 'Windows' means MSVC for simplicity
   set(USD_ROOT_DIR "D:/buildtools/usd_dbg")
+else() 
+  set(USD_ROOT_DIR "/usr/local/USD")
 endif()
 
 set(USD_LIB_DIR ${USD_ROOT_DIR}/lib/)

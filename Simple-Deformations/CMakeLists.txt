@@ -20,8 +20,10 @@ endif()
 
 add_definitions(-DBUILD_COMPONENT_SRC_PREFIX="" -DBUILD_OPTLEVEL_DEV)
 
-if (NOT USD_ROOT_DIR)
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows") # we'll assume 'Windows' means MSVC for simplicity
   set(USD_ROOT_DIR "D:/buildtools/usd_dbg")
+else() # UNIX
+  set(USD_ROOT_DIR "/usr/local/USD")
 endif()
 
 set(USD_LIB_DIR ${USD_ROOT_DIR}/lib/)
@@ -30,6 +32,6 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows") # we'll assume 'Windows' means MSVC f
     set(USD_BOOST_INC_DIR ${USD_INC_DIR}/boost-1_65_1)
 endif()
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}../bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../bin)
 
 add_subdirectory(tests)

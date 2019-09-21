@@ -10,7 +10,12 @@ add_executable (latticeMeshElasticityTest3
 set(Python_ADDITIONAL_VERSIONS 2.7)
 find_package(PythonLibs)
 
-set(EIGEN3_INC_DIR D:/buildtools/eigen_3_3_7)
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows") # we'll assume 'Windows' means MSVC for simplicity
+	set(EIGEN3_INC_DIR D:/buildtools/eigen_3_3_7)
+else()
+	set(EIGEN3_INC_DIR /usr/include/eigen3)
+endif()
+
 
 target_include_directories(latticeMeshElasticityTest3
         PUBLIC
