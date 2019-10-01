@@ -13,6 +13,7 @@ struct ConjugateGradient
         r = b;
         system.Multiply(x, q);
         r -= q;
+        system.Project(r);
 
         for(int iterations=0; ; iterations++){
 
@@ -30,6 +31,7 @@ struct ConjugateGradient
                 p.Saxpy(rho / rhoOld, p, r); // rho/rhoOld is what is referred to as "beta"
                                            // in the formal statement of the algorithm
             system.Multiply(p, q);
+            system.Project(q);
             T p_dot_q = system.Inner_Product(p, q);
             if(p_dot_q <= 0)
                 std::cout << "CG: matrix appears indefinite or singular, p_dot_q/p_dot_p="
