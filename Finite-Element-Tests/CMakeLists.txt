@@ -3,6 +3,15 @@ set (CMAKE_CXX_STANDARD 11)
 
 project (Finite-Element-Tests)
 
+# see if we have OpenMP
+find_package(OpenMP)
+if(OPENMP_FOUND)
+	message(STATUS "OpenMP Found")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+endif()
+
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows") # we'll assume 'Windows' means MSVC for simplicity
     # windows.h defines max as a macro, which interferes with std::limits<>::max()
     add_compile_definitions(NOMINMAX)
