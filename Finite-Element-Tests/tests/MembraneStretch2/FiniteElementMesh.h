@@ -1,5 +1,7 @@
 #pragma once
 
+#include <omp.h>
+
 #include "AnimatedMesh.h"
 
 #include "CGVectorWrapper.h"
@@ -61,6 +63,7 @@ struct FiniteElementMesh : public AnimatedMesh<T, 3>
     
     void addElasticForce(std::vector<Vector2>& f) const
     {
+#pragma omp parallel for
         for(int e = 0; e < m_meshElements.size(); e++)
         {
             const auto& element = m_meshElements[e];
@@ -82,16 +85,19 @@ struct FiniteElementMesh : public AnimatedMesh<T, 3>
 #endif
             
             Matrix22 H = -m_restVolume[e] * P * m_DmInverse[e].transpose();
-            
-            for(int j = 0; j < 2; j++){
-                f[element[j+1]] += H.col(j);
-                f[element[0]] -= H.col(j);
+#pragma omp critical
+            {
+                for(int j = 0; j < 2; j++){
+                    f[element[j+1]] += H.col(j);
+                    f[element[0]] -= H.col(j);
+                }
             }
         }
     }
 
     void addProductWithStiffnessMatrix(std::vector<Vector2>& dx, std::vector<Vector2>& df, const T scale) const
     {
+#pragma omp parallel for
         for(int e = 0; e < m_meshElements.size(); e++)
         {
             const auto& element = m_meshElements[e];

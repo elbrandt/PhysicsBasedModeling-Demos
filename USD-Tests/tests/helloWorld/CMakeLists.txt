@@ -1,4 +1,6 @@
-if(${CMAKE_SYSTEM_NAME} MATCHES "Windows") # we'll assume 'Windows' means MSVC for simplicity
+set(TARGET_NAME helloWorld)
+
+if (${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
         # boost links via preprocessor directives, so we need to set the dir in which the libs are located.
         link_directories(${USD_LIB_DIR})
 endif()
@@ -10,11 +12,11 @@ add_executable (helloWorld
 set(Python_ADDITIONAL_VERSIONS 2.7)
 find_package(PythonLibs)
 
-target_include_directories(helloWorld
+target_include_directories(${TARGET_NAME}
         PUBLIC
-            ${USD_INC_DIR}
-			${PYTHON_INCLUDE_PATH}
-            ${USD_BOOST_INC_DIR}
+                ${USD_INC_DIR}
+	        ${PYTHON_INCLUDE_PATH}
+                ${USD_BOOST_INC_DIR}
         )
 
 set (LINK_LIBS
@@ -24,7 +26,12 @@ set (LINK_LIBS
         ${USD_LIB_DIR}/${USD_LIB_PREFIX}usd${USD_LIB_SUFFIX}
         ${USD_LIB_DIR}/${USD_LIB_PREFIX}usdGeom${USD_LIB_SUFFIX}
         ${USD_LIB_DIR}/${USD_LIB_PREFIX}vt${USD_LIB_SUFFIX}
-		${PYTHON_LIBRARY}
+	${PYTHON_LIBRARY}
 )
 
-target_link_libraries( helloWorld ${LINK_LIBS} )
+if (NOT ${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
+        # this library is not needed on windows builds (linked via pragmas aready by boost)
+        list(APPEND LINK_LIBS ${USD_LIB_DIR}/${USD_LIB_PREFIX}boost_python${USD_LIB_SUFFIX}) # todo find library (but appears to not be necessary)
+endif()
+
+target_link_libraries(${TARGET_NAME} ${LINK_LIBS} )

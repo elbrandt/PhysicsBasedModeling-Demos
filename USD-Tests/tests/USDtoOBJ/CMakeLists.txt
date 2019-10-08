@@ -1,20 +1,22 @@
-if(${CMAKE_SYSTEM_NAME} MATCHES "Windows") # we'll assume 'Windows' means MSVC for simplicity
+set(TARGET_NAME USDtoOBJ)
+
+if (${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
         # boost links via preprocessor directives, so we need to set the dir in which the libs are located.
         link_directories(${USD_LIB_DIR})
 endif()
 
-add_executable (USDtoOBJ
+add_executable (${TARGET_NAME}
         main.cpp
         )
 
 set(Python_ADDITIONAL_VERSIONS 2.7)
 find_package(PythonLibs)
 
-target_include_directories(USDtoOBJ
+target_include_directories(${TARGET_NAME}
         PUBLIC
-            ${USD_INC_DIR}
-			${PYTHON_INCLUDE_PATH}
-            ${USD_BOOST_INC_DIR}
+                ${USD_INC_DIR}
+	        ${PYTHON_INCLUDE_PATH}
+                ${USD_BOOST_INC_DIR}
        )
 
  set (LINK_LIBS
@@ -27,4 +29,9 @@ target_include_directories(USDtoOBJ
 				${PYTHON_LIBRARY}
 )
 
-target_link_libraries(USDtoOBJ ${LINK_LIBS})
+if (NOT ${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
+        # this library is not needed on windows builds (linked via pragmas aready by boost)
+        list(APPEND LINK_LIBS ${USD_LIB_DIR}/${USD_LIB_PREFIX}boost_python${USD_LIB_SUFFIX})
+endif()
+
+target_link_libraries(${TARGET_NAME} ${LINK_LIBS})

@@ -27,5 +27,10 @@ target_include_directories(latticeMesh
                 ${PYTHON_LIBRARY}
 		)
 
+if (NOT ${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
+        # this library is not needed on windows builds (linked via pragmas aready by boost)
+        list(APPEND LINK_LIBS ${USD_LIB_DIR}/${USD_LIB_PREFIX}boost_python${USD_LIB_SUFFIX}) # todo find library (but appears to not be necessary)
+endif()
+
 target_link_libraries(latticeMesh ${LINK_LIBS})
 
