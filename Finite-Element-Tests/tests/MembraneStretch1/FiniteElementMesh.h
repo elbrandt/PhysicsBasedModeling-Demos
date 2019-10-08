@@ -77,10 +77,13 @@ struct FiniteElementMesh : public AnimatedMesh<T, 3>
 
             Matrix22 H = -m_restVolume[e] * P * m_DmInverse[e].transpose();
             
-            for(int j = 0; j < 2; j++){
-                f[element[j+1]] += H.col(j);
-                f[element[0]] -= H.col(j);
-            }
+#pragma omp critical
+			{
+				for (int j = 0; j < 2; j++) {
+					f[element[j + 1]] += H.col(j);
+					f[element[0]] -= H.col(j);
+				}
+			}
         }
     }
 
