@@ -1,23 +1,29 @@
+set(TARGET_NAME MembraneStretch2)
+
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
         # boost links via preprocessor directives, so we need to set the dir in which the libs are located.
         link_directories(${USD_LIB_DIR})
 endif()
 
-add_executable (latticeMesh
+add_executable (${TARGET_NAME}
         main.cpp
-        )
+        AnimatedMesh.h
+        CGSystemWrapper.h
+        CGVectorWrapper.h
+        ConjugateGradient.h
+        FiniteElementMesh.h
+		)
 
-set(Python_ADDITIONAL_VERSIONS 2.7)
-find_package(PythonLibs)
-
-target_include_directories(latticeMesh
+target_include_directories(${TARGET_NAME}
         PUBLIC
             ${USD_INC_DIR}
-            ${PYTHON_INCLUDE_PATH}
+            ${EIGEN3_INCLUDE_DIR}
             ${USD_BOOST_INC_DIR}
-       )
+            ${PYTHON_INCLUDE_PATH}
+        )
 
- set (LINK_LIBS
+target_link_libraries(
+        ${TARGET_NAME}
                 ${USD_LIB_DIR}/${USD_LIB_PREFIX}gf${USD_LIB_SUFFIX}
                 ${USD_LIB_DIR}/${USD_LIB_PREFIX}sdf${USD_LIB_SUFFIX}
                 ${USD_LIB_DIR}/${USD_LIB_PREFIX}tf${USD_LIB_SUFFIX}
@@ -25,7 +31,4 @@ target_include_directories(latticeMesh
                 ${USD_LIB_DIR}/${USD_LIB_PREFIX}usdGeom${USD_LIB_SUFFIX}
                 ${USD_LIB_DIR}/${USD_LIB_PREFIX}vt${USD_LIB_SUFFIX}
                 ${PYTHON_LIBRARY}
-		)
-
-target_link_libraries(latticeMesh ${LINK_LIBS})
-
+        )

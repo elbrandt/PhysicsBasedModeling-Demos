@@ -1,4 +1,4 @@
-if(${CMAKE_SYSTEM_NAME} MATCHES "Windows") # we'll assume 'Windows' means MSVC for simplicity
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
         # boost links via preprocessor directives, so we need to set the dir in which the libs are located.
         link_directories(${USD_LIB_DIR})
 endif()
@@ -9,18 +9,14 @@ add_executable (latticeMeshElasticityTest4
 
 set(Python_ADDITIONAL_VERSIONS 2.7)
 find_package(PythonLibs)
-if(${CMAKE_SYSTEM_NAME} MATCHES "Windows") # we'll assume 'Windows' means MSVC for simplicity
-   set(EIGEN3_INC_DIR D:/buildtools/eigen_3_3_7)
-else()
-   set(EIGEN3_INC_DIR /usr/include/eigen3)
-endif()
+find_package(Eigen3)
 
 target_include_directories(latticeMeshElasticityTest4
         PUBLIC
             ${USD_INC_DIR}
             ${PYTHON_INCLUDE_PATH}
             ${USD_BOOST_INC_DIR}
-            ${EIGEN3_INC_DIR}
+            ${EIGEN3_INCLUDE_DIR}
        )
 
  set (LINK_LIBS
@@ -32,12 +28,6 @@ target_include_directories(latticeMeshElasticityTest4
                 ${USD_LIB_DIR}/${USD_LIB_PREFIX}vt${USD_LIB_SUFFIX}
                 ${PYTHON_LIBRARY}
         )
-
-
-if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-        # this library is not needed on windows builds (linked via pragmas aready by boost)
-        list(APPEND LINK_LIBS ${USD_LIB_DIR}/${USD_LIB_PREFIX}boost_python${USD_LIB_SUFFIX}) # todo find library (but appears to not be necessary)
-endif()
 
 target_link_libraries(latticeMeshElasticityTest4 ${LINK_LIBS})
 

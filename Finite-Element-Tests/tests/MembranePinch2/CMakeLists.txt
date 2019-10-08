@@ -1,25 +1,24 @@
-if(${CMAKE_SYSTEM_NAME} MATCHES "Windows") # we'll assume 'Windows' means MSVC for simplicity
+set(TARGET_NAME MembranePinch2)
+
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
         # boost links via preprocessor directives, so we need to set the dir in which the libs are located.
         link_directories(${USD_LIB_DIR})
 endif()
 
-add_executable (MembranePinch2
+add_executable (${TARGET_NAME}
         main.cpp
         )
 
-set(Python_ADDITIONAL_VERSIONS 2.7)
-find_package(PythonLibs)
-
-target_include_directories(MembranePinch2
+target_include_directories(${TARGET_NAME}
         PUBLIC
             ${USD_INC_DIR}
-            ${EIGEN3_INC_DIR}
+            ${EIGEN3_INCLUDE_DIR}
             ${USD_BOOST_INC_DIR}
             ${PYTHON_INCLUDE_PATH}
         )
 
 target_link_libraries(
-        MembranePinch2
+        ${TARGET_NAME}
                 ${USD_LIB_DIR}/${USD_LIB_PREFIX}gf${USD_LIB_SUFFIX}
                 ${USD_LIB_DIR}/${USD_LIB_PREFIX}sdf${USD_LIB_SUFFIX}
                 ${USD_LIB_DIR}/${USD_LIB_PREFIX}tf${USD_LIB_SUFFIX}
